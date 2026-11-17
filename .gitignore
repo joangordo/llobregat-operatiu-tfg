@@ -1,0 +1,11 @@
+# Estat i sortides (es generen a cada execució)
+cache/
+web/
+desplegament/
+# Dades del TFG: mai al repositori (només estructura_base.rds i mapeig_sensors.csv)
+*.RData
+inputs/historial_vars_*
+*.xlsx
+data/
+.Rhistory
+.Rproj.user/

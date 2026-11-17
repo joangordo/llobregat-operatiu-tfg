@@ -1,0 +1,69 @@
+name: Predicció operativa
+
+on:
+  schedule:
+    - cron: "12,42 * * * *"   # cada 30 minuts, uns minuts després de les dades
+  workflow_dispatch:
+
+concurrency:
+  group: prediccio
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  predir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      LANG: C.UTF-8      # noms de columna amb accents (Vilada Merdançol)
+      LC_ALL: C.UTF-8
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true   # paquets binaris: instal·lació ràpida
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::dplyr
+            any::tidyr
+            any::lubridate
+            any::zoo
+            any::httr
+            any::jsonlite
+            any::lightgbm
+
+      # Estat de l'execució anterior (dades crues recents i històric de prediccions).
+      # Es guarda a la memòria cau d'Actions, no al repositori.
+      - uses: actions/cache/restore@v4
+        with:
+          path: cache
+          key: estat-${{ github.run_id }}
+          restore-keys: estat-
+
+      - name: Predicció
+        env:
+          METEOCAT_API_KEY: ${{ secrets.METEOCAT_API_KEY }}
+        run: Rscript prediccio_operativa.R
+
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: cache
+          key: estat-${{ github.run_id }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
