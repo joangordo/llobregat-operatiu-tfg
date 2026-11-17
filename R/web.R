@@ -81,8 +81,8 @@ function setLang(l) {
 }
 </script>
 <style>
-:root{--bg:#fafaf8;--fg:#1d1d1b;--mut:#6b6b66;--line:#dcdcd6;--obs:#1f5fa8;--pred:#c2571a;--ok:#2e7d4f;--warn:#b7791f;--crit:#b42318}
-@media (prefers-color-scheme:dark){:root{--bg:#161615;--fg:#ececea;--mut:#a3a39e;--line:#353533;--obs:#6ea8ef;--pred:#f08a4b;--ok:#5cc48a;--warn:#e0b04f;--crit:#f2776b}}
+:root{--avis:#fff6e5;--bg:#fafaf8;--fg:#1d1d1b;--mut:#6b6b66;--line:#dcdcd6;--obs:#1f5fa8;--pred:#c2571a;--ok:#2e7d4f;--warn:#b7791f;--crit:#b42318}
+@media (prefers-color-scheme:dark){:root{--avis:#2a2215;--bg:#161615;--fg:#ececea;--mut:#a3a39e;--line:#353533;--obs:#6ea8ef;--pred:#f08a4b;--ok:#5cc48a;--warn:#e0b04f;--crit:#f2776b}}
 html[data-lang="ca"] [lang="en"],html[data-lang="en"] [lang="ca"]{display:none}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,sans-serif}
 main{max-width:720px;margin:0 auto;padding:24px 16px 48px}
@@ -100,16 +100,20 @@ svg{width:100%;height:auto;margin-top:8px}.grid{stroke:var(--line)}.tick{fill:va
 .obs{fill:none;stroke:var(--obs);stroke-width:2}.pred{fill:none;stroke:var(--pred);stroke-width:2;stroke-dasharray:5 4}
 .pt{fill:var(--pred)}.q95{stroke:var(--warn);stroke-dasharray:2 3}.ara{stroke:var(--mut);stroke-dasharray:1 3}
 a{color:var(--obs)}
+.avis{margin:16px 0 0;padding:10px 14px;border:1px solid var(--warn);border-left-width:4px;border-radius:6px;background:var(--avis)}.avis p{margin:0;font-size:.95rem}
 </style></head><body><main>
 <header><div><h1>', t2("Predicció de cabal al Llobregat", "Llobregat River flow forecast"), '</h1>
 <p class="meta">', t2(
     paste0("Actualitzat el ", actualitzat, " (hora local) · Model M7 (LightGBM Tweedie) del TFG · Horitzons +1 a +6 h. Blau: cabal observat; taronja: previsió."),
     paste0("Updated ", actualitzat, " (local time) · M7 model (LightGBM Tweedie) · 1 to 6 h lead times. Blue: observed flow; orange: forecast.")), '</p></div>
 <div class="lang" role="group" aria-label="Language"><button type="button" data-l="ca" onclick="setLang(\'ca\')">CA</button><button type="button" data-l="en" onclick="setLang(\'en\')">EN</button></div></header>
+<div class="avis" role="note"><p>', t2(
+    '<strong>Avís:</strong> projecte acadèmic experimental. <strong>No és un sistema oficial d\'avís</strong> i no s\'ha de fer servir per prendre decisions de seguretat. En cas d\'emergència, truca al <strong>112</strong>. Avisos oficials: <a href="https://interior.gencat.cat">Protecció Civil de Catalunya</a> · <a href="https://www.meteo.cat">Meteocat</a> · <a href="https://aplicacions.aca.gencat.cat/aetr/vishid/">ACA – Aigua en temps real</a>.',
+    '<strong>Notice:</strong> experimental academic project. <strong>Not an official warning system</strong>; do not use it to make safety decisions. In an emergency call <strong>112</strong>. Official warnings: <a href="https://interior.gencat.cat">Civil Protection of Catalonia</a> · <a href="https://www.meteo.cat">Meteocat</a> · <a href="https://aplicacions.aca.gencat.cat/aetr/vishid/">ACA – real-time water data</a>.'), '</p></div>
 ', paste(blocs, collapse = "\n"), '
 <footer><p>', t2(
-    'Projecte acadèmic experimental (Grau d\'Estadística, Universitat de Barcelona). <strong>No és un sistema oficial d\'avís.</strong> Informació oficial: <a href="https://aca.gencat.cat">Agència Catalana de l\'Aigua</a> i Protecció Civil. Dades: ACA i Servei Meteorològic de Catalunya. <a href="historic_prediccions.csv">Històric de prediccions (CSV)</a>.',
-    'Experimental academic project (BSc in Statistics, University of Barcelona). <strong>Not an official warning system.</strong> Official information: <a href="https://aca.gencat.cat">Catalan Water Agency (ACA)</a> and Civil Protection. Data: ACA and Meteorological Service of Catalonia (Meteocat). <a href="historic_prediccions.csv">Forecast history (CSV)</a>.'), '</p></footer>
+    paste0('Desenvolupat per Joan Gordó Guardia a partir del sistema operatiu original d\'Àlex Rodríguez Molla, al grup de recerca BIOST3 (Secció d\'Estadística, Universitat de Barcelona), amb la direcció d\'Antonio Monleón-Getino i Pere López Brosa i la supervisió de Javier Méndez-Viera. Dades: cabals i embassaments de l\'<a href="https://aca.gencat.cat">Agència Catalana de l\'Aigua</a>; pluja © <a href="https://www.meteo.cat">Servei Meteorològic de Catalunya</a>. Dades consultades el ', actualitzat, ', sense modificar; les previsions són elaboració pròpia. Agraïm a l\'ACA i al Meteocat que posin aquestes dades a disposició. <a href="historic_prediccions.csv">Històric de prediccions (CSV)</a> · <a href="https://github.com/joangordo/llobregat-operatiu-tfg">Codi</a>.'),
+    paste0('Developed by Joan Gordó Guardia from the original operational system by Àlex Rodríguez Molla, in the BIOST3 research group (Statistics section, University of Barcelona), supervised by Antonio Monleón-Getino, Pere López Brosa and Javier Méndez-Viera. Data: river flow and reservoirs from the <a href="https://aca.gencat.cat">Catalan Water Agency (ACA)</a>; rainfall © <a href="https://www.meteo.cat">Meteorological Service of Catalonia (Meteocat)</a>. Data retrieved on ', actualitzat, ', without modification; forecasts are our own. We thank the ACA and Meteocat for making these data available. <a href="historic_prediccions.csv">Forecast history (CSV)</a> · <a href="https://github.com/joangordo/llobregat-operatiu-tfg">Code</a>.')), '</p></footer>
 </main></body></html>')
   writeLines(html, ruta, useBytes = TRUE)
 }
