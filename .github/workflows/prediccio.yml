@@ -72,5 +72,3 @@ jobs:
 
       - id: deploy
         uses: actions/deploy-pages@v4
-      - id: deploy
-        uses: actions/deploy-pages@v4
